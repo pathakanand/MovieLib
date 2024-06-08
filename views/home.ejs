@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home</title>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <div class="container">
+    <h1>Welcome, <%= user.name %>!</h1>
+
+    <!-- Create List Form -->
+    <form action="/list" method="post">
+      <input type="text" name="name" placeholder="List Name" required>
+      <label>
+        <input type="checkbox" name="isPublic" value="true"> Public
+      </label>
+      <button type="submit">Create List</button>
+    </form>
+
+    <!-- Search Form -->
+    <form action="/search" method="get">
+      <input type="text" name="q" placeholder="Search for a movie" required>
+      <button type="submit">Search</button>
+    </form>
+
+    <!-- Display Lists with Movies -->
+    <h2>Your Lists</h2>
+    <% if (lists && lists.length > 0) { %>
+      <% lists.forEach(list => { %>
+        <% if (list.movies.length > 0) { %>
+          <div>
+            <h3><%= list.name %></h3>
+            <ul>
+              <% list.movies.forEach(movie => { %>
+                <li><%= movie.title %> (<%= movie.year %>)</li>
+              <% }) %>
+            </ul>
+          </div>
+        <% } %>
+      <% }) %>
+    <% } else { %>
+      <p>No lists found.</p>
+    <% } %>
+
+    <!-- Display Search Results -->
+    <% if (movies) { %>
+      <h2>Search Results</h2>
+      <ul>
+        <% movies.forEach(movie => { %>
+          <li>
+            <img src="<%= movie.Poster %>" alt="<%= movie.Title %> Poster" style="width: 100px;">
+            <p>Title: <%= movie.Title %></p>
+            <p>Year: <%= movie.Year %></p>
+            <form action="/list/addMovie" method="post">
+              <input type="hidden" name="title" value="<%= movie.Title %>">
+              <input type="hidden" name="year" value="<%= movie.Year %>">
+              <input type="hidden" name="imdbID" value="<%= movie.imdbID %>">
+              <input type="hidden" name="poster" value="<%= movie.Poster %>">
+              <select name="listId" required>
+                <option value="">Select List</option>
+                <% lists.forEach(list => { %>
+                  <option value="<%= list._id %>"><%= list.name %></option>
+                <% }) %>
+              </select>
+              <button type="submit">Add to List</button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+</body>
+</html>

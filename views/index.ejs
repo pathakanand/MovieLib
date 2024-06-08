@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to MovieLib</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="container">
+    <h1>Welcome to MovieLib</h1>
+    <p>This is your go-to app for managing your movie library.</p>
+    <% if (!user) { %>
+      <a href="/login">Login</a> or <a href="/register">Register</a>
+    <% } else { %>
+      <a href="/home">Go to Home</a>
+    <% } %>
+  </div>
+</body>
+</html>
